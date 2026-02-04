@@ -9,13 +9,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      // FIX: Add a fallback so TypeScript knows it's never undefined
+      // FIX: Must match AuthModule logic exactly!
       secretOrKey: config.get<string>('JWT_SECRET') || 'ENIGMA_SUPER_SECRET_KEY_2026', 
     });
   }
 
   async validate(payload: any) {
-    // This inserts the 'user' object into 'req.user'
+    // If this runs, the token signature is VALID
     return { id: payload.sub, email: payload.username, role: payload.role };
   }
 }
