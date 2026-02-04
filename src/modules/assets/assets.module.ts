@@ -10,6 +10,6 @@ import { LedgerModule } from '../ledger/ledger.module';
     LedgerModule
   ],
   providers: [AssetsService],
-  exports: [AssetsService]
+  exports: [AssetsService, TypeOrmModule]
 })
 export class AssetsModule {}
