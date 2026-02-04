@@ -31,10 +31,10 @@ import { GenesisSeed } from './common/seeds/genesis.seed'; // <--- NEW
     CacheModule.registerAsync({
       isGlobal: true,
       useFactory: () => ({
-        store: redisStore,
+        store: require('cache-manager-ioredis'), // <--- Use require here
         host: process.env.DB_HOST || 'localhost',
         port: 6379,
-        ttl: 30,
+        ttl: 30, // 30 seconds
       }),
     }),
     TypeOrmModule.forRootAsync({
