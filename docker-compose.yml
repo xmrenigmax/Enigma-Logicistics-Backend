@@ -1,24 +1,36 @@
 version: '3.8'
 services:
-  enigma_api:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - DB_HOST=enigma_db
-    depends_on:
-      - enigma_db
-
-  enigma_db:
+  # 1. The Development Database (Port 5432)
+  enigma_db_dev:
     image: postgres:15-alpine
+    container_name: enigma_dev_container
     environment:
       POSTGRES_USER: enigma
       POSTGRES_PASSWORD: secure_password
-      POSTGRES_DB: enigma_core
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      POSTGRES_DB: enigma_dev
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+
+  # 2. The Test Database (Port 5433)
+  enigma_db_test:
+    image: postgres:15-alpine
+    container_name: enigma_test_container
+    environment:
+      POSTGRES_USER: enigma
+      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: enigma_test
+    ports:
+      - "5433:5432" # Maps internal 5432 to external 5433
+    tmpfs: 
+      - /var/lib/postgresql/data # Runs in RAM for speed!
+
+  # 3. Redis (Shared for Token caching)
+  enigma_cache:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
 
 volumes:
-  pgdata:
+  pgdata_dev:

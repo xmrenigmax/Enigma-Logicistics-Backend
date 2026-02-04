@@ -1,0 +1,43 @@
+name: Enigma CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "development", "testing", "master" ]
+  pull_request:
+    branches: [ "development", "testing", "master" ]
+
+jobs:
+  # 1. TEST STAGE (Runs on every push)
+  quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install Dependencies
+      run: npm ci
+      
+    - name: Run Unit Tests
+      run: npm run test
+      
+    # - name: Run E2E Tests (Only for Testing/Master)
+    #   if: github.ref == 'refs/heads/testing' || github.ref == 'refs/heads/master'
+    #   run: npm run test:e2e
+
+  # 2. DEPLOY STAGE (Conditional)
+  deploy:
+    needs: quality-gate
+    if: github.event_name == 'push' # Only deploy on push, not PR
+    runs-on: ubuntu-latest
+    environment: 
+      name: ${{ github.ref_name }} # Matches 'development', 'testing', etc.
+    
+    steps:
+      - name: Deploy to Enigma Cloud
+        run: |
+          echo "Deploying branch ${{ github.ref_name }} to ${{ github.ref_name }} environment..."
+          # Here you would add your Azure/AWS/DigitalOcean deployment script
+          # e.g., docker build ... && docker push ...
