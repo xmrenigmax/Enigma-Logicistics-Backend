@@ -11,13 +11,13 @@ export class BookingsController {
   constructor(private bookingsService: BookingsService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN, UserRole.MANAGER) // Only staff can force a booking manually for now
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async create(@Body() body: any) {
     return this.bookingsService.createReservation(body);
   }
 
   @Post(':id/check-in')
-  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.GUEST) // Guests can self-check-in
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.GUEST)
   async checkIn(@Param('id') id: string) {
     return this.bookingsService.checkInGuest(id);
   }

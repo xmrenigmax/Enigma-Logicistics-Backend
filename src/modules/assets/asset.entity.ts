@@ -6,19 +6,19 @@ export class Asset {
   id: string;
 
   @Column()
-  name: string; // e.g., "Room 402"
+  name: string;
 
   @Column({ unique: true })
-  hardwareId: string; // The MAC address or IoT topic
+  hardwareId: string;
 
   @Column({ default: 'LOCKED' })
   lockState: 'LOCKED' | 'UNLOCKED' | 'JAMMED';
 
   @Column({ type: 'jsonb', nullable: true })
-  telemetry: any; // Stores live temp, battery, signal strength
+  telemetry: any;
 
   @Column({ nullable: true })
-  activeTokenHash: string; // The current SETR hash
+  activeTokenHash: string;
 
   @Column({ default: false })
   isUnderMaintenance: boolean;
