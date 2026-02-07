@@ -1,7 +1,6 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { AssetsService } from '../assets/asset.service';
 import { LedgerService } from '../ledger/ledger.service';
-import _ from 'lodash';
 import { User } from '../users/user.entity';
 
 // The "Constitution" of your autonomous system
@@ -22,7 +21,7 @@ export class IntelligenceService {
 
   async processIntent(agentId: string, intent: string, targetAssetId: string, category: keyof typeof PRIORITY_HIERARCHY) {
     // 1. Calculate Priority Score
-    const priorityScore = _.get(PRIORITY_HIERARCHY, category, 0);
+    const priorityScore = PRIORITY_HIERARCHY[category] ?? 0;
     
     // 2. Check for Active Conflicts (e.g., Is the room currently in 'SECURITY_LOCKDOWN'?)
     // In a real implementation, we would query the current system state here.
@@ -43,11 +42,12 @@ export class IntelligenceService {
     }
 
     // 3. Execute the Command (The "Autonomous" Action)
-    let result;
+    let executionId = 'NO_HARDWARE_ACTION';
     if (intent === 'UNLOCK_DOOR') {
       // We pass 'true' to skip internal checks because the Intelligence Layer has already authorized it
       const actor = { id: agentId } as User;
-      result = await this.assetsService.remoteUnlock(targetAssetId, actor, `Authorized by Intelligence (Score: ${priorityScore})`);
+      const result = await this.assetsService.remoteUnlock(targetAssetId, actor, `Authorized by Intelligence (Score: ${priorityScore})`);
+      executionId = result.auditId;
     }
 
     // 4. Record the "Why" (XAI Compliance)
@@ -64,7 +64,7 @@ export class IntelligenceService {
 
     return { 
       success: true, 
-      executionId: result.auditId,
+      executionId,
       xai_explanation: `Action permitted due to ${category} priority.` 
     };
   }

@@ -8,9 +8,11 @@ import { UsersModule } from './modules/users/users.modules'; // Note: Ensure fil
 import { AssetsModule } from './modules/assets/assets.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { LedgerModule } from './modules/ledger/ledger.module';
-import { IntelligenceModule } from './modules/intelligence/intelligence.model'; // Note: Ensure filename matches
+import { IntelligenceModule } from './modules/intelligence/intelligence.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
 
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { User } from './modules/users/user.entity';
 import { Asset } from './modules/assets/asset.entity';
 import { LedgerEntry } from './modules/ledger/ledger.entity';
@@ -66,6 +68,7 @@ import { GenesisSeed } from './common/seeds/genesis.seed';
     IntelligenceModule,
     BookingsModule,
   ],
-  providers: [GenesisSeed],
+  controllers: [AppController],
+  providers: [AppService, GenesisSeed],
 })
 export class AppModule {}
