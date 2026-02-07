@@ -4,7 +4,6 @@ import { Repository, LessThanOrEqual, MoreThanOrEqual, And } from 'typeorm';
 import { Reservation, BookingStatus } from './reservation.entity';
 import { LedgerService } from '../ledger/ledger.service';
 import { IntelligenceService } from '../intelligence/intelligence.service';
-import _ from 'lodash';
 
 @Injectable()
 export class BookingsService {
@@ -27,7 +26,7 @@ export class BookingsService {
       }
     });
 
-    if (!_.isNil(conflict)) {
+    if (conflict) {
       throw new ConflictException('INVENTORY_CLASH: Room is already booked for these dates.');
     }
 

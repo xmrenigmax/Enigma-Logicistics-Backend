@@ -4,7 +4,7 @@ import { Reservation } from './reservation.entity';
 import { BookingsService } from './bookings.service';
 import { BookingsController } from './bookings.controller';
 import { LedgerModule } from '../ledger/ledger.module';
-import { IntelligenceModule } from '../intelligence/intelligence.model';
+import { IntelligenceModule } from '../intelligence/intelligence.module';
 
 
 @Module({

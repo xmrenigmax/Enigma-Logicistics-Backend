@@ -1,12 +1,12 @@
-import { Controller, Post, Body, Param, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport'; // <--- ADD THIS
+import { Controller, Post, Body, Param, UseGuards, Request } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { BookingsService } from './bookings.service';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/role.decorator';
+import { Roles } from '../../common/decorators/role.decorator';
 import { UserRole } from '../users/user.entity';
 
 @Controller('bookings')
-@UseGuards(AuthGuard('jwt'), RolesGuard) 
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class BookingsController {
   constructor(private bookingsService: BookingsService) {}
 

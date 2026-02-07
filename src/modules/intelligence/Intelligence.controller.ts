@@ -1,11 +1,12 @@
 import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { IntelligenceService } from './intelligence.service';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/role.decorator';
+import { Roles } from '../../common/decorators/role.decorator';
 import { UserRole } from '../users/user.entity';
 
 @Controller('intelligence')
-@UseGuards(RolesGuard)
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class IntelligenceController {
   constructor(private intelligenceService: IntelligenceService) {}
 
