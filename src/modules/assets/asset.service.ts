@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Asset } from './asset.entity';
-import { LedgerService } from '../ledger/ledger.service'; // We assume this exists
+import { LedgerService } from '../ledger/ledger.service';
 import { User } from '../users/user.entity';
 
 @Injectable()
@@ -20,11 +20,11 @@ export class AssetsService {
       throw new NotFoundException('ASSET_NOT_FOUND');
     }
 
-    // 1. Perform the Hardware Action (Mocked for now)
+    //  Perform the Hardware Action (Mocked for now)
     asset.lockState = 'UNLOCKED';
     await this.assetRepo.save(asset);
 
-    // 2. Write to the Immutable Ledger (The "Patent" part)
+    // Write to the Immutable Ledger (The "Patent" part)
     await this.ledgerService.recordEntry({
       actorId: actor.id,
       action: 'REMOTE_UNLOCK',
@@ -35,10 +35,10 @@ export class AssetsService {
       }
     });
 
-    return { 
-      success: true, 
-      status: 'UNLOCKED', 
-      auditId: 'PENDING_HASH_GENERATION' 
+    return {
+      success: true,
+      status: 'UNLOCKED',
+      auditId: 'PENDING_HASH_GENERATION'
     };
   }
 }

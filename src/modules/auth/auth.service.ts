@@ -12,7 +12,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  // 1. VALIDATE USER (Check Email & Password)
+  // VALIDATE USER (Check Email & Password)
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.userRepo.findOne({ 
       where: { email },
@@ -26,7 +26,7 @@ export class AuthService {
     return null;
   }
 
-  // 2. LOGIN (Generate the "Session Key")
+  // LOGIN (Generate the "Session Key")
   async login(user: any) {
     const payload = { username: user.email, sub: user.id, role: user.role };
     return {

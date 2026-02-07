@@ -13,16 +13,15 @@ export class RolesGuard implements CanActivate {
     ]);
 
     if (!requiredRoles) {
-      return true; // No roles required, public route
+      return true;
     }
 
     const { user } = context.switchToHttp().getRequest();
 
-    // The "Root" Admin Override
     if (user.role === UserRole.ADMIN) { return true; }
 
     const hasRole = requiredRoles.includes(user.role);
-    
+
     if (!hasRole) {
       throw new ForbiddenException('ENIGMA_SECURITY_VIOLATION: Insufficient Clearance');
     }
